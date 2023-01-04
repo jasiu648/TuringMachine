@@ -11,14 +11,16 @@ namespace TuringMachine
     {
         public int State;
         public char Symbol;
-        public enum Direction
-        {
-            Left,
-            Right,
-            Stay
-        }
+        public MoveDirection Direction;
     }
-    
+
+    public enum MoveDirection
+    {
+        Left,
+        Right,
+        Stay
+    }
+
     public struct MachineArgument 
     { 
         public int State;
@@ -34,20 +36,30 @@ namespace TuringMachine
 
     public class Machine
     {
-        private List<char> Tape;
+        
         private readonly char _emptySymbol = 'B';
+        private readonly int _acceptingState = 0;
         private Dictionary<MachineArgument,MachineMove> InstructionsTable;
-        private int state = 0;
+
+        private List<char> Tape;
+        private int state = 1;
         private int position = 0;
-        private List<int> AcceptingStates;
+        
 
         public Machine(Reader reader) 
         {
-
+            
         }
 
         private void MakeMove()
         {
+            var argument = new MachineArgument() { State = state, Symbol = GetCurrentSymbol()};
+
+            if (!InstructionsTable.TryGetValue(argument, out MachineMove move))
+                throw new InvalidOperationException();
+
+            
+
 
         }
 
@@ -55,8 +67,9 @@ namespace TuringMachine
         {
             return -1;
         }
-        private bool CheckIfAccepting() => AcceptingStates.Contains(state);
+        private bool CheckIfAccepting() => state == _acceptingState;
 
+        private char GetCurrentSymbol() => Tape[position];
         
 
     }
