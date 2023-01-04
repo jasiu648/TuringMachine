@@ -91,7 +91,7 @@ namespace TuringMachine
 
         public void Compute()
         {
-            while(state != 0)
+            while(!CheckIfAccepting())
             {
                 PrintTape();
                 MakeMove();
