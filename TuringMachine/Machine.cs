@@ -48,9 +48,35 @@ namespace TuringMachine
 
         public Machine(Reader reader) 
         {
-            
+            InstructionsTable = reader.ReadFunctions();
+            var word = reader.ReadWord();
+            LoadWord(word);
         }
-
+        private void LoadWord(string word)
+        {
+            char[] chars = word.ToCharArray();
+            Tape.AddRange(chars);
+        }
+        
+        private void UpdatePosition(MoveDirection direction)
+        {
+            if(direction == MoveDirection.Left)
+            {
+                position++;
+                if(position >= Tape.Count)
+                {
+                    Tape.Add(_emptySymbol);
+                }
+            }
+            else if (direction == MoveDirection.Right)
+            {
+                position--;
+                if(position < 0)
+                {
+                    throw new Exception();
+                }
+            }
+        }
         private void MakeMove()
         {
             var argument = new MachineArgument() { State = state, Symbol = GetCurrentSymbol()};
@@ -58,14 +84,28 @@ namespace TuringMachine
             if (!InstructionsTable.TryGetValue(argument, out MachineMove move))
                 throw new InvalidOperationException();
 
-            
-
-
+            Tape[position] = move.Symbol;
+            state = move.State;
+            UpdatePosition(move.Direction);
         }
 
-        public int Compute()
+        public void Compute()
         {
-            return -1;
+            while(state != 0)
+            {
+                PrintTape();
+                MakeMove();
+            }
+
+            
+        }
+
+        private void PrintTape()
+        {
+            foreach(var symbol in Tape)
+            {
+                Console.Write(symbol.ToString() + " ");
+            }
         }
         private bool CheckIfAccepting() => state == _acceptingState;
 
