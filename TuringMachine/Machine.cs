@@ -36,10 +36,10 @@ namespace TuringMachine
     }
 
     public class Machine
-    {
-        
+    {     
         private readonly char _emptySymbol = '0';
         private readonly int _acceptingState = 0;
+        private readonly int _maxMovesCount = 10000;
         private Dictionary<MachineArgument,MachineMove> InstructionsTable;
 
         private List<char> Tape;
