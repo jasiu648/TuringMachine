@@ -47,11 +47,15 @@ namespace TuringMachine
         private int position = 0;
         private int movesCount = 0;
 
+        private HashSet<(int, int, string)> TapeHistory;
+
         public Machine(Reader reader) 
         {
             InstructionsTable = reader.ReadFunctions();
-            var word = reader.ReadWord();
+            TapeHistory = new HashSet<(int, int, string)>();
             Tape = new List<char>();
+
+            var word = reader.ReadWord();
             LoadWord(word);
         }
         private void LoadWord(string word)
