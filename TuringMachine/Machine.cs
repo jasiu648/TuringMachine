@@ -63,6 +63,13 @@ namespace TuringMachine
             char[] chars = word.ToCharArray();
             Tape.AddRange(chars);
         }
+
+        private bool AddToHistorry()
+        {
+            var tapeString = new string(Tape.ToArray());
+            return TapeHistory.Add((state, position, tapeString));
+            
+        }
         
         private void UpdatePosition(MoveDirection direction)
         {
@@ -80,6 +87,8 @@ namespace TuringMachine
                 {
                     Tape.Insert(0,_emptySymbol);
                 }
+                else
+                    position--;
             }
         }
         private void MakeMove()
@@ -99,7 +108,7 @@ namespace TuringMachine
         private void PrintMove(MachineArgument argument, MachineMove move)
         {
             Console.WriteLine($"Obecny stan {argument.State}, obecny symbol {argument.Symbol}." +
-                $" Maszyna napisze symbol {move.Symbol}, wejdzie w stan {move.State} i wykona ruch {move.Direction}");
+                $" Maszyna napisze symbol {move.Symbol}, wejdzie w stan {move.State} i wykona ruch {move.Direction} \n \n");
         }
 
         public void Compute()
@@ -107,9 +116,15 @@ namespace TuringMachine
             PrintTape();
 
             while (!CheckIfAccepting())
-            {
+            {                
                 MakeMove();
                 PrintTape();
+                
+                if(!AddToHistorry())
+                {
+                    Console.WriteLine("Maszyna weszła w nieskonczony ciag rozwiazan. Koniec obliczen");
+                    break;
+                }             
             }
 
             PrintResult();
