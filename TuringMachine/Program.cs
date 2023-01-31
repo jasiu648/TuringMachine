@@ -1,8 +1,8 @@
 ﻿//
 using TuringMachine;
 
-string pathToWord = "..\\..\\..\\testW.txt";
-string pathToFunction = "..\\..\\..\\testF.txt";
+string pathToWord = "..\\..\\..\\test\\testAddW.txt";
+string pathToFunction = "..\\..\\..\\test\\testAddF.txt";
 
 
 var reader = new Reader(pathToWord, pathToFunction);
